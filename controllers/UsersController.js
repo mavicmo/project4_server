@@ -159,7 +159,6 @@ const getUserByID = async (req, res) => {
 // update  user object
 const updateUserByID = async (req, res) => {
   try {
-    console.log(req.body.email);
     let email;
     // get email and make it lowercase
     if (req.body.email) {

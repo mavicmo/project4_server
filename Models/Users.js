@@ -20,14 +20,9 @@ const Users = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    role: {
-      type: String,
-      default: "user",
-      enum: ["user", "admin"],
-    },
     Months: {
       type: Schema.Types.ObjectId,
-      ref: "Months",
+      ref: "MonthModel",
     },
   },
   {

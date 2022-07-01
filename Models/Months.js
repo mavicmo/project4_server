@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import ExpensesModel from "./Expenses.js";
 const Schema = mongoose.Schema;
 
 const Months = new Schema(
@@ -12,13 +13,8 @@ const Months = new Schema(
       required: [true],
     },
     expenses: {
-      type: Array,
-      default: [],
-    },
-    date: {
-      type: Date,
-      required: [true],
-      unique: true,
+      type: Schema.Types.ObjectId,
+      ref: "ExpensesModel",
     },
   },
   {
