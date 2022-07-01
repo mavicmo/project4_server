@@ -1,0 +1,53 @@
+import db from "../Models/index.js";
+
+const { Months } = db;
+
+const monthsExist = async (month, year) => {
+  try {
+    const exists = await Months.findOne({ month: month, year: year });
+
+    if (exists) {
+      return "monthExists";
+    }
+    return false;
+  } catch (error) {
+    return "serverError";
+  }
+};
+
+const findMonthById = async (monthId) => {
+  const month = await Months.findById(monthId);
+  if (!month) {
+    throw "monthNotFound";
+  } else {
+    return month;
+  }
+};
+
+const updateMonth = async (id, monthData) => {
+  try {
+    const update = await Months.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          ...monthData,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    return update;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+const monthsFunctions = {
+  monthsExist,
+  findMonthById,
+  updateMonth,
+};
+
+export default monthsFunctions;

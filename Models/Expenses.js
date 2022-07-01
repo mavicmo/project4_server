@@ -15,11 +15,6 @@ const Expenses = new Schema(
       type: Array,
       default: [],
     },
-    date: {
-      type: Date,
-      required: [true],
-      unique: true,
-    },
   },
   {
     timestamps: true,

@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
 
 app.use("/example", routes.exampleRoutes);
 app.use("/api/users", routes.usersRoutes);
+app.use("/api/months", routes.monthsRoutes);
 
 /* App Listener */
 app.listen(PORT, () => console.log(`Listening on PORT:${PORT}`));
