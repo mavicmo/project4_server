@@ -1,11 +1,12 @@
 import exampleCtrl from "./exampleController.js";
 import usersCtrl from "./UsersController.js";
 import monthsCtrl from "./monthsController.js";
-
+import expensesCtrl from "./expensesController.js";
 const controllers = {
   exampleCtrl,
   usersCtrl,
   monthsCtrl,
+  expensesCtrl,
 };
 
 export default controllers;
