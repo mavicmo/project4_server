@@ -36,6 +36,7 @@ const validatedUser = async (email, password) => {
   }
 };
 
+// function to read a user data by ID
 const findUserById = async (id) => {
   const user = await Users.findById(id).select("-password").lean();
   if (!user) {
@@ -45,6 +46,7 @@ const findUserById = async (id) => {
   }
 };
 
+// function to update the user
 const updateUser = async (id, userData) => {
   try {
     const update = await Users.findByIdAndUpdate(

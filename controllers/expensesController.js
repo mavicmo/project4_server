@@ -1,48 +1,43 @@
 import db from "../Models/index.js";
-import monthsFunctions from "../Middleware/monthsFunctons.js";
-//import months from the DB
-const { Months } = db;
+import expensesFunctions from "../Middleware/expensesFunctions.js";
 
-// create a month object
-const createMonth = async (req, res) => {
+// get expenses Model
+const { Expenses } = db;
+
+// create a expense
+const createExpense = async (req, res) => {
   try {
-    // retrive the data
-    const { year } = req.body;
-
-    //lower month to lowerCase
-    const month = req.body.month.toLowerCase();
-    // check if the month and year already exist
-    const exists = await monthsFunctions.monthsExist(month, year);
-
-    if (exists) throw "monthExists";
+    const { amount, category } = req.body;
+    let name = req.body.name.toLowerCase();
+    //validate if expense already exist
+    const exists = await expensesFunctions.expenseExist(name);
+    if (exists) throw "expenseExists";
     if (exists === "serverError") throw exists;
-    // create the new month object
-    const newMonth = {
-      month,
-      year,
+    // create expense in db
+    const newExpense = {
+      name,
+      amount,
+      category,
     };
 
-    // send month object to MongoDB
-    await Months.create(newMonth);
-
+    await Expenses.create(newExpense);
     return res.status(201).json({
       status: 201,
-      newMonth,
-      message: "Month was created successfully",
+      newExpense,
+      message: "Expense was created successfully",
       requestedAt: new Date().toLocaleString(),
     });
   } catch (error) {
     console.log(error);
 
     // month and year already exist
-    if (error === "monthExists") {
+    if (error === "expenseExists") {
       return res.status(409).json({
         status: 409,
         message: error,
         requestAt: new Date().toLocaleString(),
       });
     }
-
     // all other errors
     return res.status(500).json({
       status: 500,
@@ -51,33 +46,30 @@ const createMonth = async (req, res) => {
     });
   }
 };
-
-// read a month object
-const getMonthById = async (req, res) => {
+// read a expense by ID
+const getExpensesById = async (req, res) => {
   try {
-    //get url id
+    // get id of the expense
     const id = req.params.id;
-    // get month data
-    const month = await monthsFunctions.findMonthById(id);
+    //get expense data
+    const expense = await expensesFunctions.findExpenseById(id);
 
     return res.status(200).json({
       status: 200,
       message: "Success",
-      month,
+      expense,
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     console.log(error);
-
     // month and year already exist
-    if (error === "monthNotFound") {
+    if (error === "expenseNotFound") {
       return res.status(409).json({
         status: 409,
         message: error,
         requestAt: new Date().toLocaleString(),
       });
     }
-
     // all other errors
     return res.status(500).json({
       status: 500,
@@ -86,24 +78,44 @@ const getMonthById = async (req, res) => {
     });
   }
 };
-// update a month object
-const updateMonthByID = async (req, res) => {
+// read all the expenses
+const getAllExpenses = async (req, res) => {
   try {
-    //get params id
-    const id = req.params.id;
-
-    const updateMonth = await monthsFunctions.updateMonth(id, req.body);
-    if (updateMonth === false) throw "updateError";
+    const expenses = await Expenses.find({});
 
     return res.status(200).json({
       status: 200,
       message: "Success",
-      updateMonth,
+      expenses,
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     console.log(error);
+    // all other errors
+    return res.status(500).json({
+      status: 500,
+      message: "Server error",
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
+// update a expense by ID
+const updateExpensesById = async (req, res) => {
+  try {
+    //get expense ID
+    const id = req.params.id;
+    // update expense object
+    const updateExpense = await expensesFunctions.updateExpense(id, req.body);
+    if (updateExpense === false) throw "updateError";
 
+    return res.status(200).json({
+      status: 200,
+      message: "Success",
+      updateExpense,
+      requestAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
     // update error
     if (error === "updateError") {
       return res.status(409).json({
@@ -112,7 +124,6 @@ const updateMonthByID = async (req, res) => {
         requestAt: new Date().toLocaleString(),
       });
     }
-
     // all other errors
     return res.status(500).json({
       status: 500,
@@ -121,19 +132,17 @@ const updateMonthByID = async (req, res) => {
     });
   }
 };
-
-//delete a month object
-const deleteMonthByID = async (req, res) => {
+// delete a expense by ID
+const deleteExpensesById = async (req, res) => {
   try {
-    await Months.findByIdAndDelete(req.params.id);
+    await Expenses.findByIdAndDelete(req.params.id);
     return res.status(200).json({
       status: 200,
-      message: "Success Month has been deleted",
+      message: "Success Expense has been deleted",
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
     console.log(error);
-
     // all other errors
     return res.status(500).json({
       status: 500,
@@ -142,11 +151,13 @@ const deleteMonthByID = async (req, res) => {
     });
   }
 };
-const monthsCtrl = {
-  createMonth,
-  getMonthById,
-  updateMonthByID,
-  deleteMonthByID,
+
+const expensesCtrl = {
+  createExpense,
+  getExpensesById,
+  getAllExpenses,
+  updateExpensesById,
+  deleteExpensesById,
 };
 
-export default monthsCtrl;
+export default expensesCtrl;

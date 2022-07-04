@@ -1,5 +1,9 @@
+import db from "./index.js";
+import Expenses from "./Expenses.js";
 import mongoose from "mongoose";
-import ExpensesModel from "./Expenses.js";
+
+// const { Expenses } = db;
+
 const Schema = mongoose.Schema;
 
 const Months = new Schema(
@@ -13,8 +17,7 @@ const Months = new Schema(
       required: [true],
     },
     expenses: {
-      type: Schema.Types.ObjectId,
-      ref: "ExpensesModel",
+      type: [{ type: Schema.Types.ObjectId, ref: "ExpensesModel" }],
     },
   },
   {

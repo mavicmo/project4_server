@@ -12,8 +12,8 @@ const Expenses = new Schema(
       required: [true],
     },
     category: {
-      type: Array,
-      default: [],
+      type: String,
+      required: [true],
     },
   },
   {
