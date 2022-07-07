@@ -21,8 +21,7 @@ const Users = new Schema(
       required: [true, "Password is required"],
     },
     Months: {
-      type: Schema.Types.ObjectId,
-      ref: "MonthModel",
+      type: [String],
     },
   },
   {
