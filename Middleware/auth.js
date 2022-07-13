@@ -5,6 +5,7 @@ const authJWT = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
+      console.log(`hit`);
       return res.status(403).send("A token is required for authentication");
     } else {
       const user = jwtFunctions.decodeUser(authHeader);
@@ -13,6 +14,7 @@ const authJWT = async (req, res, next) => {
       next();
     }
   } catch (error) {
+    console.log(error);
     res.sendStatus(401);
   }
 };

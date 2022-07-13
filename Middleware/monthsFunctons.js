@@ -18,7 +18,16 @@ const monthsExist = async (month, year) => {
 const findMonthById = async (monthId) => {
   const month = await Months.findById(monthId);
   if (!month) {
-    throw "monthNotFound";
+    throw "notFound";
+  } else {
+    return month;
+  }
+};
+
+const findMonths = async (monthId) => {
+  const month = await Months.find();
+  if (!month) {
+    throw "notFound";
   } else {
     return month;
   }
@@ -47,6 +56,7 @@ const updateMonth = async (id, monthData) => {
 const monthsFunctions = {
   monthsExist,
   findMonthById,
+  findMonths,
   updateMonth,
 };
 

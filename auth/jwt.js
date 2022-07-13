@@ -18,8 +18,11 @@ const createToken = (user) => {
 // decode the jwt token
 const decodeUser = (token) => {
   let decoded = jwt.verify(token, process.env.JWT_SECRET);
+
   return decoded;
 };
+
+console.log(decodeUser);
 
 const jwtFunctions = {
   createToken,

@@ -12,7 +12,7 @@ router.get("/:id", expensesCtrl.getExpensesById);
 //get all the expenses
 router.get("/", expensesCtrl.getAllExpenses);
 // update a Expense route
-router.put("/:id", expensesCtrl.updateExpensesById);
+router.put("/edit/:id", expensesCtrl.updateExpensesById);
 // delete a Expense route
 router.delete("/:id", auth, expensesCtrl.deleteExpensesById);
 

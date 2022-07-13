@@ -40,7 +40,7 @@ const validatedUser = async (email, password) => {
 const findUserById = async (id) => {
   const user = await Users.findById(id).select("-password").lean();
   if (!user) {
-    throw "UserNotFound";
+    throw "notFound";
   } else {
     return user;
   }

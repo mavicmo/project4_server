@@ -15,7 +15,7 @@ router.post("/login", controllers.usersCtrl.login);
 router.get("/:id", auth, controllers.usersCtrl.getUserByID);
 
 // update user by ID
-router.put("/:id", auth, controllers.usersCtrl.updateUserByID);
+router.put("/edit/:id", auth, controllers.usersCtrl.updateUserByID);
 
 // delete user by ID
 router.delete("/:id", auth, controllers.usersCtrl.deleteUserByID);

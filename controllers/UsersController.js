@@ -139,7 +139,7 @@ const getUserByID = async (req, res) => {
     console.log(error);
 
     // error matches
-    if (error === "UserNotFound") {
+    if (error === "notFound") {
       return res.status(401).json({
         status: 401,
         message: error,
@@ -236,6 +236,7 @@ const deleteUserByID = async (req, res) => {
     });
   }
 };
+
 const usersCtrl = {
   signup,
   login,
