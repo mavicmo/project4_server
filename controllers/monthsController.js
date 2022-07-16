@@ -1,6 +1,7 @@
 import db from "../Models/index.js";
 import monthsFunctions from "../Middleware/monthsFunctons.js";
 import userFunctions from "../Middleware/userFunctions.js";
+import expensesFunctions from "../Middleware/expensesFunctions.js";
 //import months from the DB
 const { Months, Users } = db;
 
@@ -25,6 +26,14 @@ const createMonth = async (req, res) => {
       year,
       user: currentUser._id,
     };
+    // const userID = req.user._id;
+
+    // // update Users with the Month data
+    // const updateUser = await userFunctions.addMonthToUser(userID, newMonth);
+
+    // const addToUser = Users({
+    //   months: req.body,
+    // });
 
     // send month object to MongoDB
     await Months.create(newMonth);
@@ -181,18 +190,19 @@ const deleteMonthByID = async (req, res) => {
 
 const addExpense = async (req, res) => {
   try {
+    console.log(req.body);
     // get the req body
-    const { expenseId, monthsId } = req.body;
+    const { expenseId, monthId } = req.body;
 
     const userId = req.user._id;
     // validate input
-    if (!(expenseId && monthsId)) {
+    if (!(expenseId && monthId)) {
       throw "inputError";
     }
 
     // get ID for user and month
     const currentUser = await userFunctions.findUserById(userId);
-    const currentMonth = await monthsFunctions.findMonthById(monthsId);
+    const currentMonth = await monthsFunctions.findMonthById(monthId);
 
     // check if this is the user that created this month
     if (!currentUser._id.equals(currentMonth.user))
@@ -267,10 +277,54 @@ const removeExpense = async (req, res) => {
   }
 };
 
+const getExpensePerMonth = async (req, res) => {
+  try {
+    const monthId = req.params.id;
+
+    const month = await monthsFunctions.findMonthById(monthId);
+
+    const monthExpenses = await expensesFunctions.findMonthExpenses(
+      month.expenses
+    );
+
+    const need = monthExpenses.filter((expense) => expense.category === "Need");
+    const want = monthExpenses.filter((expense) => expense.category === "Want");
+    const save = monthExpenses.filter((expense) => expense.category === "Save");
+    const investment = monthExpenses.filter(
+      (expense) => expense.category === "Investment"
+    );
+    const paycheck = monthExpenses.filter(
+      (expense) => expense.category === "Paycheck"
+    );
+
+    const data = {
+      need,
+      want,
+      save,
+      investment,
+      paycheck,
+    };
+
+    res.status(200).send({
+      data: data,
+      message: "Successfully retrived all the expense data in the month",
+    });
+  } catch (error) {
+    console.log(error);
+    // all other errors
+    return res.status(500).json({
+      status: 500,
+      message: "Server error",
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
+
 const monthsCtrl = {
   createMonth,
   getMonthById,
   getAllMonths,
+  getExpensePerMonth,
   updateMonthByID,
   deleteMonthByID,
   addExpense,

@@ -53,6 +53,8 @@ const updateMonth = async (id, monthData) => {
   }
 };
 
+const expenseInMonth = async (monthId, expenseName) => {};
+
 const monthsFunctions = {
   monthsExist,
   findMonthById,

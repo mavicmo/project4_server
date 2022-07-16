@@ -67,10 +67,31 @@ const updateUser = async (id, userData) => {
   }
 };
 
+// const addMonthToUser = async (id, monthData) => {
+//   try {
+//     const update = await Users.findByIdAndUpdate(
+//       id,
+//       {
+//         $months: {
+//           ...monthData,
+//         },
+//       },
+//       {
+//         new: true,
+//       }
+//     );
+//     return update;
+//   } catch (error) {
+//     console.log(error);
+//     return false;
+//   }
+// };
+
 const userFunctions = {
   emailExist,
   validatedUser,
   findUserById,
+  // addMonthToUser,
   updateUser,
 };
 

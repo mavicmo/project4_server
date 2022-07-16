@@ -1,22 +1,52 @@
 import db from "../Models/index.js";
 
-const { Expenses } = db;
+const { Expenses, Months } = db;
 
 // function to validate if the expenese already exists
-const expenseExist = async (name) => {
+const expenseExist = async (name, amount, monthId) => {
   try {
-    const exists = await Expenses.findOne({ name: name });
+    const month = await Months.findById(monthId);
+    const expense = await Expenses.findOne({ name: name, amount: amount });
 
-    if (exists) {
+    const doesExist = false;
+
+    month.expenses.forEach((id) => {
+      currentExpense = Expenses.findOne({ id });
+      console.log(currentExpense);
+    });
+    // month.expenses.forEach((id) => {
+    //   expense.forEach((expenseId) => {
+    //     currentExpense = Expenses.findOne({ id });
+    //     console.log(currentExpense);
+    //     if (expenseId._id === id) {
+    //       doesExist = true;
+    //     }
+    //   });
+    // });
+
+    if (doesExist) {
       return "expenseExists";
+    } else {
+      return false;
     }
-    return false;
   } catch (error) {
     return "serverError";
   }
 };
 const findExpenseById = async (expenseId) => {
   const expense = await Expenses.findById(expenseId);
+  if (!expense) {
+    throw "expenseNotFound";
+  } else {
+    return expense;
+  }
+};
+
+const findMonthExpenses = async (expenseId) => {
+  const expense = await Expenses.find().where("_id").in(expenseId).exec();
+
+  // console.log(expense);
+  // console.log(expenseId);
   if (!expense) {
     throw "expenseNotFound";
   } else {
@@ -47,6 +77,7 @@ const expensesFunctions = {
   expenseExist,
   findExpenseById,
   updateExpense,
+  findMonthExpenses,
 };
 
 export default expensesFunctions;

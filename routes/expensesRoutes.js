@@ -6,13 +6,13 @@ const { expensesCtrl } = controllers;
 const router = express.Router();
 
 // create a Expense route
-router.post("/createexpense", expensesCtrl.createExpense);
+router.post("/createexpense", auth, expensesCtrl.createExpense);
 // get a Expense by ID route
-router.get("/:id", expensesCtrl.getExpensesById);
+router.get("/:id", auth, expensesCtrl.getExpensesById);
 //get all the expenses
-router.get("/", expensesCtrl.getAllExpenses);
+router.get("/", auth, expensesCtrl.getAllExpenses);
 // update a Expense route
-router.put("/edit/:id", expensesCtrl.updateExpensesById);
+router.put("/edit/:id", auth, expensesCtrl.updateExpensesById);
 // delete a Expense route
 router.delete("/:id", auth, expensesCtrl.deleteExpensesById);
 

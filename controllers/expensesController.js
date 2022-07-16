@@ -1,23 +1,34 @@
 import db from "../Models/index.js";
 import expensesFunctions from "../Middleware/expensesFunctions.js";
+import userFunctions from "../Middleware/userFunctions.js";
+import monthsFunctions from "../Middleware/monthsFunctons.js";
 
 // get expenses Model
-const { Expenses } = db;
+const { Expenses, Months, Users } = db;
 
 // create a expense
 const createExpense = async (req, res) => {
   try {
-    const { amount, category } = req.body;
+    const { amount, category, monthId } = req.body;
     let name = req.body.name.toLowerCase();
-    //validate if expense already exist
-    const exists = await expensesFunctions.expenseExist(name);
-    if (exists) throw "expenseExists";
-    if (exists === "serverError") throw exists;
+
+    // validate if expense already exist
+    // const exists = await expensesFunctions.expenseExist(name, amount, monthId);
+    // console.log(exists);
+    // if (exists) throw "expenseExists";
+    // if (exists === "serverError") throw exists;
+
+    // get current user
+    const currentUser = await userFunctions.findUserById(req.user._id);
+    const currentMonth = await monthsFunctions.findMonthById(monthId);
+
     // create expense in db
     const newExpense = {
       name,
       amount,
       category,
+      user: currentUser._id,
+      month: currentMonth._id,
     };
 
     await Expenses.create(newExpense);
