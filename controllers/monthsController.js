@@ -26,16 +26,7 @@ const createMonth = async (req, res) => {
       year,
       user: currentUser._id,
     };
-    // const userID = req.user._id;
 
-    // // update Users with the Month data
-    // const updateUser = await userFunctions.addMonthToUser(userID, newMonth);
-
-    // const addToUser = Users({
-    //   months: req.body,
-    // });
-
-    // send month object to MongoDB
     await Months.create(newMonth);
 
     return res.status(201).json({
@@ -190,7 +181,6 @@ const deleteMonthByID = async (req, res) => {
 
 const addExpense = async (req, res) => {
   try {
-    console.log(req.body);
     // get the req body
     const { expenseId, monthId } = req.body;
 
