@@ -22,8 +22,6 @@ const decodeUser = (token) => {
   return decoded;
 };
 
-console.log(decodeUser);
-
 const jwtFunctions = {
   createToken,
   decodeUser,

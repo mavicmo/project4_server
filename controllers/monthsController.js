@@ -3,7 +3,7 @@ import monthsFunctions from "../Middleware/monthsFunctons.js";
 import userFunctions from "../Middleware/userFunctions.js";
 import expensesFunctions from "../Middleware/expensesFunctions.js";
 //import months from the DB
-const { Months, Users } = db;
+const { Months, Users, Expenses } = db;
 
 // create a month object
 const createMonth = async (req, res) => {
@@ -310,11 +310,34 @@ const getExpensePerMonth = async (req, res) => {
   }
 };
 
+const deleteExpensesPerMonth = async (req, res) => {
+  try {
+    const monthId = req.params.id;
+
+    await Expenses.deleteMany({
+      month: monthId,
+    });
+
+    res.status(200).send({
+      message: "Successfully deleted all the expense data in the month",
+    });
+  } catch (error) {
+    console.log(error);
+    // all other errors
+    return res.status(500).json({
+      status: 500,
+      message: "Server error",
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
+
 const monthsCtrl = {
   createMonth,
   getMonthById,
   getAllMonths,
   getExpensePerMonth,
+  deleteExpensesPerMonth,
   updateMonthByID,
   deleteMonthByID,
   addExpense,

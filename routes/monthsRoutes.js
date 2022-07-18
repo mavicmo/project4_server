@@ -18,9 +18,15 @@ router.get("/month/getexpenses/:id", monthsCtrl.getExpensePerMonth);
 router.put("/edit/:id", auth, monthsCtrl.updateMonthByID);
 // delete a month route
 router.delete("/:id", auth, monthsCtrl.deleteMonthByID);
+// delete all the expenses for each month
+router.delete(
+  "/month/deleteexpenses/:id",
+  auth,
+  monthsCtrl.deleteExpensesPerMonth
+);
 // add expense to month route
 router.put("/addexpense", auth, monthsCtrl.addExpense);
-
+// remove expense from route
 router.put("/removeexpense", auth, monthsCtrl.removeExpense);
 
 export { router as monthsRoutes };

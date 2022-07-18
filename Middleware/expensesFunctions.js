@@ -73,6 +73,7 @@ const updateExpense = async (id, expenseData) => {
     return false;
   }
 };
+
 const expensesFunctions = {
   expenseExist,
   findExpenseById,
