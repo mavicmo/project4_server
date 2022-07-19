@@ -1,20 +1,19 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
 /* Load env vars*/
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const PORT = process.env.PORT || 3005;
 
 /* Internal Modules*/
-// import { exampleRoutes } from './routes/index.js';
-import routes from './routes/index.js';
-
+// import { exampleRoutes, users } from "./routes/index.js";
+import routes from "./routes/index.js";
 
 /* connect to DB */
-// import './config/db.connection.js'; //can place it in model index folder as well 
-import './config/db.connection.js'
+// import './config/db.connection.js'; //can place it in model index folder as well
+import "./config/db.connection.js";
 /* Setup Express App*/
 const app = express();
 
@@ -24,7 +23,7 @@ const app = express();
 /* Mount middleware */
 
 // use a static public folder
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,17 +37,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 /* Routes */
-app.get('/', (req, res) => {
-    const template = `
+app.get("/", (req, res) => {
+  const template = `
       <div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
         <h1> HELLO WORLD</h1>
       </div>
-    `
-    res.send(template);
-})
+    `;
+  res.send(template);
+});
 
-app.use('/example', routes.exampleRoutes);
-
+app.use("/example", routes.exampleRoutes);
+app.use("/api/users", routes.usersRoutes);
+app.use("/api/months", routes.monthsRoutes);
+app.use("/api/expenses", routes.expensesRoutes);
 
 /* App Listener */
 app.listen(PORT, () => console.log(`Listening on PORT:${PORT}`));
