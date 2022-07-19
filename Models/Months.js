@@ -1,8 +1,4 @@
-// import db from "./index.js";
-// import Expenses from "./Expenses.js";
 import mongoose from "mongoose";
-
-// const { Expenses } = db;
 
 const Schema = mongoose.Schema;
 

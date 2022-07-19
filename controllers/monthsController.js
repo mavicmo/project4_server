@@ -225,19 +225,20 @@ const addExpense = async (req, res) => {
 };
 
 const removeExpense = async (req, res) => {
+  console.log(req.body);
   try {
     // get the req body
-    const { expenseId, monthsId } = req.body;
+    const { expenseId, monthId } = req.body;
 
     const userId = req.user._id;
     // validate input
-    if (!(expenseId && monthsId)) {
+    if (!(expenseId && monthId)) {
       throw "inputError";
     }
 
     // get ID for user and month
     const currentUser = await userFunctions.findUserById(userId);
-    const currentMonth = await monthsFunctions.findMonthById(monthsId);
+    const currentMonth = await monthsFunctions.findMonthById(monthId);
 
     // check if this is the user that created this month
     if (!currentUser._id.equals(currentMonth.user))
