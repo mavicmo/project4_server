@@ -87,11 +87,11 @@ const login = async (req, res) => {
     //validate data
     if (!(email && password)) throw "invalidInput";
     const user = await userFunctions.validatedUser(email, password);
-
+    console.log(user);
     if (user) {
       // link jwt with user object
       const jwt = createToken(user);
-
+      console.log(jwt);
       return res.status(200).json({
         status: 200,
         message: "Success",
