@@ -12,7 +12,7 @@ router.post("/signup", controllers.usersCtrl.signup);
 router.post("/login", controllers.usersCtrl.login);
 
 // get user by ID
-router.get("/:id", auth, controllers.usersCtrl.getUserByID);
+router.get("/:id", controllers.usersCtrl.getUserByID);
 
 // update user by ID
 router.put("/edit/:id", auth, controllers.usersCtrl.updateUserByID);
