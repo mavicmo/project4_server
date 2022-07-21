@@ -159,11 +159,19 @@ const getUserByID = async (req, res) => {
 // update  user object
 const updateUserByID = async (req, res) => {
   try {
+    const { firstName, lastName, password, confirmPassword } = req.body;
+
     let email;
     // get email and make it lowercase
     if (req.body.email) {
       email = req.body.email.toLowerCase();
     }
+
+    // check password and confirmed passwords matchup
+    if (password !== confirmPassword) throw "passwordDoesNotMatch";
+
+    // hash the passwords
+    const hashedPassword = hashPassword(password);
     // get ID
     const id = req.params.id;
     //get user object
@@ -174,7 +182,14 @@ const updateUserByID = async (req, res) => {
       if (exists) throw "emailExists";
     }
 
-    const updateUser = await userFunctions.updateUser(id, req.body);
+    const updatedUser = {
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    };
+
+    const updateUser = await userFunctions.updateUser(id, updatedUser);
     if (updateUser === false) throw "updateError";
 
     //create a new jwt for the user
