@@ -45,8 +45,6 @@ const findExpenseById = async (expenseId) => {
 const findMonthExpenses = async (expenseId) => {
   const expense = await Expenses.find().where("_id").in(expenseId).exec();
 
-  // console.log(expense);
-  // console.log(expenseId);
   if (!expense) {
     throw "expenseNotFound";
   } else {

@@ -126,13 +126,48 @@ const login = async (req, res) => {
 // read user object
 const getUserByID = async (req, res) => {
   try {
-    const id = req.user._id;
+    const id = req.params.id;
     //get user without password information from
     const user = await userFunctions.findUserById(id);
+    //create a new jwt for the user
+    const jwt = createToken(user);
     return res.status(200).json({
       status: 200,
       message: "Success",
+      jwt,
       user,
+      requestAt: new Date().toLocaleString(),
+    });
+  } catch (error) {
+    console.log(error);
+
+    // error matches
+    if (error === "notFound") {
+      return res.status(401).json({
+        status: 401,
+        message: error,
+        requestAt: new Date().toLocaleString(),
+      });
+    }
+
+    // all other errors
+    return res.status(500).json({
+      status: 500,
+      message: "Server error",
+      requestAt: new Date().toLocaleString(),
+    });
+  }
+};
+
+// read all user objects
+const getAllUsers = async (req, res) => {
+  try {
+    //get user without password information from
+    const users = await Users.find({});
+    return res.status(200).json({
+      status: 200,
+      message: "Success",
+      users,
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
@@ -175,31 +210,27 @@ const updateUserByID = async (req, res) => {
     // get ID
     const id = req.params.id;
     //get user object
-    const user = await userFunctions.findUserById(id);
+    const getUser = await userFunctions.findUserById(id);
 
-    if (email !== user.email) {
+    if (email !== getUser.email) {
       const exists = await userFunctions.emailExist(email);
       if (exists) throw "emailExists";
     }
 
-    const updatedUser = {
+    const user = {
       firstName,
       lastName,
       email,
       password: hashedPassword,
     };
 
-    const updateUser = await userFunctions.updateUser(id, updatedUser);
+    const updateUser = await userFunctions.updateUser(id, user);
     if (updateUser === false) throw "updateError";
-
-    //create a new jwt for the user
-    const jwt = createToken(updateUser);
 
     return res.status(200).json({
       status: 200,
       message: "Success",
-      updateUser,
-      jwt,
+      user,
       requestAt: new Date().toLocaleString(),
     });
   } catch (error) {
@@ -256,6 +287,7 @@ const usersCtrl = {
   signup,
   login,
   getUserByID,
+  getAllUsers,
   updateUserByID,
   deleteUserByID,
 };
