@@ -93,8 +93,10 @@ const getMonthById = async (req, res) => {
 // read all the month objects
 const getAllMonths = async (req, res) => {
   try {
+    const userId = req.user._id;
+
     // get month data
-    const month = await monthsFunctions.findMonths();
+    const month = await monthsFunctions.findMonths({ userId });
 
     return res.status(200).json({
       status: 200,
@@ -225,7 +227,6 @@ const addExpense = async (req, res) => {
 };
 
 const removeExpense = async (req, res) => {
-  console.log(req.body);
   try {
     // get the req body
     const { expenseId, monthId } = req.body;

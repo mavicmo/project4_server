@@ -24,8 +24,8 @@ const findMonthById = async (monthId) => {
   }
 };
 
-const findMonths = async (monthId) => {
-  const month = await Months.find();
+const findMonths = async (userId) => {
+  const month = await Months.find({ user: userId.userId });
   if (!month) {
     throw "notFound";
   } else {
